@@ -10,13 +10,13 @@
         <div class="bd">
             <el-form :model="loginForm">
                 <el-form-item>
-                <el-input type="userName" placeholder="请输入账号或者用户名"></el-input>
+                <el-input type="userName" v-model="loginForm.username" placeholder="请输入账号或者用户名"></el-input>
                 </el-form-item>
                 <el-form-item>
-                <el-input placeholder="请输入密码" type="password"></el-input>
+                <el-input placeholder="请输入密码" v-model="loginForm.password" type="password"></el-input>
                 </el-form-item>
                 <el-form-item>
-                <el-button type="primary" class="submitBtn" @click="clickSubmit">登录</el-button>
+                <el-button type="primary" class="submitBtn" @click="cookLogin">登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -24,22 +24,42 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'login',
   data () {
     return {
       loginForm: {
-        userName: '',
+        username: '',
         password: ''
       }
     }
   },
   methods: {
-    clickSubmit () {
-      this.$router.push('/main/cookEnd')
+
+    cookLogin () {
+      console.log(this.loginForm)
+      const loginUrL = '/api/signin/'
+
+      var params = new URLSearchParams()
+      params.append('username', this.loginForm.username)
+      params.append('password', this.loginForm.password)
+      axios.post(loginUrL, params)
+        .then(response => {
+          console.log(response)
+          if (response.data.success === true) {
+            this.$router.push('/main/cookEnd')
+            this.$store.commit('generateUserID')
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
+
 </script>
 <style>
 .imgtest {
