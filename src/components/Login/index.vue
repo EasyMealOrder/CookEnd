@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     clickSubmit () {
-      this.$router.push('/cookEnd')
+      this.$router.push('/main/cookEnd')
     }
   }
 }
