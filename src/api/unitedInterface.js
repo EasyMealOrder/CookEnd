@@ -10,6 +10,11 @@ const genstr = '1234567890abcdefghijklmnopqrstuvwxyz'
 export default {
   genstr,
   apihost,
+  getCookie (name) {
+    var value = '; ' + document.cookie
+    var parts = value.split('; ' + name + '=')
+    if (parts.length === 2) return parts.pop().split(';').shift()
+  },
   // 厨师用
   getAllToDoOrder (cb) {
     console.log('getAllToDoOrder called')
@@ -23,17 +28,36 @@ export default {
 
   // 厨师用
   finishADishInAOrder: function (orderId, dishId, cb, errorCb) {
-    // todo: 向后端更新状态
-    // 成功则cb
-    cb()
-    // 失败则errorCb
+    const loginUrL = '/api/dishrecord/finish/'
+
+    let params = new URLSearchParams()
+    params.append('orderID', orderId)
+    params.append('dishID', dishId)
+    axios.post(loginUrL, params, {headers: {'X-CSRFToken': this.getCookie('csrftoken')}})
+      .then(response => {
+        console.log(response)
+        cb()
+      })
+      .catch(error => {
+        console.log(error)
+        errorCb()
+      })
   },
 
   // 厨师用
-  finishAOrder: function (orderIdk, cb, errorCb) {
-    // todo：像后端更新状态
-    // 成功则cb
-    cb()
-    // 失败则errorCb
+  finishAOrder: function (orderId, cb, errorCb) {
+    const loginUrL = '/api/order/finish/'
+
+    let params = new URLSearchParams()
+    params.append('orderID', orderId)
+    axios.post(loginUrL, params, {headers: {'X-CSRFToken': this.getCookie('csrftoken')}})
+      .then(response => {
+        console.log(response)
+        cb()
+      })
+      .catch(error => {
+        console.log(error)
+        errorCb()
+      })
   }
 }

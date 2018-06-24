@@ -11,12 +11,12 @@
             <div class="orderMetaData"> 订单号 {{order.id}}</div>
             <hr/>
 
-            <div class="wrapperOfDishesInToDoOrder" v-for="dish in order.dishList" :key="dish.dishId">
+            <div class="wrapperOfDishesInToDoOrder" v-for="dish in order.dishList" :key="dish.dishID">
               <div id="dishWrapper">
               <div id="dishNameItem">{{dish.name}}</div>
               <div id="dishAmountItem">{{dish.number}}份</div>
               <div id="dishCompletedItem">
-                <button id="finishADishInAOrderButton" v-show="!dish.finished" @click="finishADishInAOrder(order.id, dish.dishId)">完成</button>
+                <button id="finishADishInAOrderButton" v-show="!dish.finished" @click="finishADishInAOrder(order.id, dish.dishID)">完成</button>
                 <div id="ADishInAOrderIsFinishedText" v-show="dish.finished">已完成</div>
               </div>
               </div>
@@ -62,7 +62,7 @@ export default {
 
     finishADishInAOrder: function (orderId, dishId) {
       var idx = this.allOrderToDo.findIndex(order => order.id === orderId)
-      var jdx = this.allOrderToDo[idx].dishList.findIndex(dish => dish.dishId === dishId)
+      var jdx = this.allOrderToDo[idx].dishList.findIndex(dish => dish.dishID === dishId)
       // 必须通过$set，否则无法触发视图更新
       service.finishADishInAOrder(orderId, dishId, () => {
         this.$set(this.allOrderToDo[idx].dishList[jdx], 'finished', true)
@@ -73,6 +73,7 @@ export default {
     },
 
     finishAOrder: function (orderId) {
+      console.log('点击完成订单' + orderId)
       var idx = this.allOrderToDo.findIndex(order => order.id === orderId)
       var jdx = this.allOrderToDo[idx].dishList.findIndex(dish => dish.finished === false)
       // jdx === -1, 说明所有dish都做好了

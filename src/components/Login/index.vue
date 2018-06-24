@@ -37,7 +37,6 @@ export default {
     }
   },
   methods: {
-
     cookLogin () {
       console.log(this.loginForm)
       const loginUrL = '/api/signin/'
@@ -45,12 +44,11 @@ export default {
       var params = new URLSearchParams()
       params.append('username', this.loginForm.username)
       params.append('password', this.loginForm.password)
-      axios.post(loginUrL, params)
+      axios.post(loginUrL, params, {withCredentials: true})
         .then(response => {
-          console.log(response)
           if (response.data.success === true) {
+            console.log(this.$store.csrftoken)
             this.$router.push('/main/cookEnd')
-            this.$store.commit('generateUserID')
           }
         })
         .catch(error => {

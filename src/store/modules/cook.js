@@ -1,6 +1,7 @@
 // import service from '../../api/unitedInterface'
 
-const state = {}
+const state = {
+}
 
 const getters = {}
 
