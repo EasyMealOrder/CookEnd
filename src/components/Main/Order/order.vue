@@ -1,10 +1,8 @@
 <template>
   <el-container class='cookEndWrapper'>
     <el-container class='cookEndMain'>
-      <div  v-show="isAllListDisplayed">
-          这是全部订单
-      </div>
-        <div v-show="!isAllListDisplayed">
+
+        <div>
         <div  class="masonry">
           <div  class="toDoOrderWrapperInCookEnd item" v-for="order in allOrderToDo" :key="order.id" d>
             <div class="orderMetaData">{{order.table}}号桌    {{order.orderTime}}</div>
@@ -41,21 +39,11 @@ export default {
   name: 'cookEndPage',
   data: function () {
     return {
-      isAllListDisplayed: false,
       buttonText: '全部订单',
       allOrderToDo: []
     }
   },
   methods: {
-    changeDisplayedList: function () {
-      if (this.isAllListDisplayed) {
-        this.buttonText = '全部订单'
-      } else {
-        this.buttonText = '未做订单'
-      }
-      this.isAllListDisplayed = !this.isAllListDisplayed
-    },
-
     showMessage: function (msg) {
       console.log(msg)
     },
@@ -89,28 +77,57 @@ export default {
       } else {
         this.showMessage('还有没完成的菜')
       }
+    },
+
+    getUnfinishedOrderRecycly: function () {
+      // console.log('getUnfinishedOrder called')
+
+      service.getAllToDoOrder(
+        (textGet) => {
+          this.allOrderToDo = textGet['data']
+          // 每个订单获取菜品
+          this.allOrderToDo.forEach(order => {
+            axios.get('/api/dishrecord/' + order.id + '/')
+              .then(res => {
+                let idx = this.allOrderToDo.findIndex(odr => odr.id === order.id)
+                this.$set(this.allOrderToDo[idx], 'dishList', res['data'])
+              })
+              .catch(err => console.log(err))
+          })
+        }
+      )
+
+      // 如果跳出了界面，就不继续请求了
+      // 否则，当前计时完，开启下一个计时
+      if (this.$route.path === '/main/order') {
+        let _this = this
+        this.timeOut = setTimeout(() => {
+          _this.getUnfinishedOrderRecycly()
+        }, 5000)
+      } else {
+        this.timeOut = ''
+      }
     }
   },
 
   computed: {
-
-  },
-  created () {
-    service.getAllToDoOrder(
-      (textGet) => {
-        this.allOrderToDo = textGet['data']
-        // 每个订单获取菜品
-        this.allOrderToDo.forEach(order => {
-          axios.get('/api/dishrecord/' + order.id + '/')
-            .then(res => {
-              let idx = this.allOrderToDo.findIndex(odr => odr.id === order.id)
-              this.$set(this.allOrderToDo[idx], 'dishList', res['data'])
-              console.log(this.allOrderToDo[idx].dishList)
-            })
-            .catch(err => console.log(err))
-        })
+    timeOut: {
+      set (val) {
+        this.$store.state.timeout = val
+      },
+      get () {
+        return this.$store.state.timeout
       }
-    )
+    }
+  },
+
+  created () {
+    // 如果进入页面时，还有之前的计时器，就删除
+    if (this.timeOut) {
+      clearTimeout(this.timeOut)
+    }
+
+    this.getUnfinishedOrderRecycly()
   }
 }
 </script>

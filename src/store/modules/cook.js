@@ -1,6 +1,7 @@
 // import service from '../../api/unitedInterface'
 
 const state = {
+  timeout: ''
 }
 
 const getters = {}

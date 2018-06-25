@@ -47,7 +47,7 @@ export default {
       axios.post(loginUrL, params, {withCredentials: true})
         .then(response => {
           if (response.data.success === true) {
-            console.log(this.$store.csrftoken)
+            // console.log(this.$store.csrftoken)
             this.$router.push('/main/cookEnd')
           }
         })
