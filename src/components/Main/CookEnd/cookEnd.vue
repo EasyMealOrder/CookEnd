@@ -14,7 +14,7 @@
 export default {
   data () {
     return {
-      name: '蔡吉涵',
+      name: 'USERNAME',
       id: '12138'
     }
   }
@@ -29,6 +29,7 @@ export default {
   width: 90%;
   bottom: 0;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(218, 214, 214);
 }
 
 .identityMessage {
@@ -45,14 +46,16 @@ export default {
   flex-grow: 0;
   flex-shrink: 0;
   margin: 15px;
-  background-color: #f1d586;
+  background-color: white;
+  padding: 5px;
 }
 
 .cookId {
   flex-grow: 0;
   flex-shrink: 0;
   margin: 15px;
-  background-color: #f1d586;
+  background-color: white;
+  padding: 5px;
 }
 
 img {

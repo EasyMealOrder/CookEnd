@@ -4,28 +4,27 @@
 
         <div>
         <div  class="masonry">
-          <div  class="toDoOrderWrapperInCookEnd item" v-for="order in allOrderToDo" :key="order.id" d>
-            <div class="orderMetaData">{{order.table}}号桌    {{order.orderTime}}</div>
-            <div class="orderMetaData"> 订单号 {{order.id}}</div>
-            <hr/>
+          <el-card class="toDoOrderWrapperInCookEnd item box-card" v-for="order in allOrderToDo" :key="order.id" shadow="hover">
+            <div slot="header" class="clearfix">
+              <span class="orderMetaData">{{order.table}}号桌    {{order.orderTime}}</span>
+              <span class="orderMetaData"> 订单号 {{order.id}}</span>
+              <el-button type="danger" v-show="!order.isOrderCompleted" id="allCompletedButton" @click="finishAOrder(order.id)">全部完成</el-button>
+            </div>
 
-            <div class="wrapperOfDishesInToDoOrder" v-for="dish in order.dishList" :key="dish.dishID">
+            <div class="wrapperOfDishesInToDoOrder text item" v-for="dish in order.dishList" :key="dish.dishID">
               <div id="dishWrapper">
               <div id="dishNameItem">{{dish.name}}</div>
               <div id="dishAmountItem">{{dish.number}}份</div>
               <div id="dishCompletedItem">
-                <button id="finishADishInAOrderButton" v-show="!dish.finished" @click="finishADishInAOrder(order.id, dish.dishID)">完成</button>
+                <button type="danger" id="finishADishInAOrderButton" v-show="!dish.finished" @click="finishADishInAOrder(order.id, dish.dishID)">完成</button>
                 <div id="ADishInAOrderIsFinishedText" v-show="dish.finished">已完成</div>
               </div>
               </div>
             </div>
 
-            <hr/>
-
-            <div>备注: {{order.note}} </div>
-            <button v-show="!order.isOrderCompleted" id="allCompletedButton" @click="finishAOrder(order.id)">全部完成</button>
-            </div>
-          </div>
+            <div id="dishNote">备注: {{order.note}} </div>
+          </el-card>
+        </div>
         </div>
     </el-container>
   </el-container>
@@ -103,7 +102,7 @@ export default {
         let _this = this
         this.timeOut = setTimeout(() => {
           _this.getUnfinishedOrderRecycly()
-        }, 5000)
+        }, 50000)
       } else {
         this.timeOut = ''
       }
@@ -139,12 +138,12 @@ export default {
   height: 100%;
   left: 10%;
   margin: 0;
+  background-color: rgb(218, 214, 214);
 }
 
 .toDoOrderWrapperInCookEnd {
-  border-color: black;
-  border-width: 1px;
-  border-style: solid;
+  border-width: 3px;
+  border-style: none;
   padding-left: 5px;
   padding-right: 5px;
   padding-top: 5px;
@@ -169,13 +168,12 @@ html {
   flex-basis: auto;
   height: auto;
   min-width: 360px;
-  margin: 15px 15px 15px 0; /* Some gutter */
-  background-color: #cfcccc;
+  margin: 20px 20px 20px 0; /* Some gutter */
+  background-color: white;
 }
 
 .orderMetaData {
   font-size: 14px;
-  background-color: #b3b2b2;
 }
 
 #dishWrapper {
@@ -193,6 +191,7 @@ html {
 #dishNameItem {
   flex-shrink: 4;
   flex-grow: 4;
+  width: 40%;
 }
 
 #dishAmountItem {
@@ -206,16 +205,38 @@ html {
 }
 
 #allCompletedButton {
-  width: 100%;
+  width: 30%;
   margin-bottom: 5px;
-  background-color: #b56969;
+  background-color: #e75454;
+  float: right;
+  padding: 3px 0;
+  color: white;
 }
 
 #finishADishInAOrderButton {
-  background-color: #b56969;
+  background-color: #e75454;
+  float: right;
+  color: white;
+  height: 21px;
+  line-height: 21px;
+  padding: auto;
+  border-radius: 10%;
+}
+
+#finishADishInAOrderButton span {
+  position: absolute;
+  height: 15px;
+  line-height: 15px;
 }
 
 #ADishInAOrderIsFinishedText {
   color: #447c16;
+  float: right;
+}
+
+#dishNote {
+  position: relative;
+  bottom: 0;
+  background-color: rgb(245, 240, 240);
 }
 </style>
