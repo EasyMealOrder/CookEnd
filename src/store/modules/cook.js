@@ -1,14 +1,26 @@
 // import service from '../../api/unitedInterface'
 
 const state = {
-  timeout: ''
+  timeout: '',
+  username: ''
 }
 
-const getters = {}
+const getters = {
+  getUserName: state => state.username
+}
 
-const actions = {}
+const actions = {
+  setCookMessage ({commit}, name) {
+    commit('setUserMessage', name)
+  }
+}
 
-const mutations = {}
+const mutations = {
+  setUserMessage (state, name) {
+    state.username = name
+    console.log('set user message')
+  }
+}
 
 export default {
   state,

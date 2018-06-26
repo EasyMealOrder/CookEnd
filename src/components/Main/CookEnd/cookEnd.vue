@@ -2,22 +2,25 @@
   <el-container class="cookEndPage">
     <el-container class="identityMessage">
       <img src="/static/images/timg.jpeg"/>
-      <p class="cookName">用户名: {{ name }}</p>
-      <p class="cookId">账号: {{ id }}</p>
+      <p class="cookName">用户名: {{ username }}</p>
+      <p class="cookId">账号: {{ userid }}</p>
     </el-container>
   </el-container>
 </template>
 
 <script>
 // import service from '../../api/unitedInterface'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
-      name: 'USERNAME',
-      id: '12138'
+      userid: '12138'
     }
-  }
+  },
+  computed: mapGetters({
+    username: 'getUserName'
+  })
 }
 </script>
 

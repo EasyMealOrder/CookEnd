@@ -25,6 +25,7 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'login',
@@ -37,6 +38,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setCookMessage'
+    ]),
     cookLogin () {
       console.log(this.loginForm)
       const loginUrL = '/api/signin/'
@@ -44,6 +48,8 @@ export default {
       var params = new URLSearchParams()
       params.append('username', this.loginForm.username)
       params.append('password', this.loginForm.password)
+      // 在登录瞬间获取用户名用于个人信息显示
+      this.setCookMessage(this.loginForm.username)
       axios.post(loginUrL, params, {withCredentials: true})
         .then(response => {
           if (response.data.success === true) {
