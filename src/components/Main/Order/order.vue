@@ -33,6 +33,7 @@
 <script>
 import service from '../../../api/unitedInterface'
 import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'cookEndPage',
@@ -46,7 +47,27 @@ export default {
     showMessage: function (msg) {
       console.log(msg)
     },
+    ...mapGetters([
+      'getOrderLength'
+    ]),
+    ...mapActions([
+      'setOrderLength'
+    ]),
+    openNewOrder (num) {
+      this.$notify({
+        title: '您有新的订单，请及时处理',
+        message: '接收到' + num + '个新订单'
+      })
+    },
+    openFinishOrder () {
+      this.$notify.success({
+        title: '你有一条新通知',
+        message: '订单完成',
+        showClose: false
+      })
+    },
 
+    // 完成某个订单中的部分菜品
     finishADishInAOrder: function (orderId, dishId) {
       var idx = this.allOrderToDo.findIndex(order => order.id === orderId)
       var jdx = this.allOrderToDo[idx].dishList.findIndex(dish => dish.dishID === dishId)
@@ -59,6 +80,8 @@ export default {
       })
     },
 
+    // 完成某个订单（全部菜品）
+    // 必须订单中所有菜品均已完成
     finishAOrder: function (orderId) {
       console.log('点击完成订单' + orderId)
       var idx = this.allOrderToDo.findIndex(order => order.id === orderId)
@@ -69,6 +92,11 @@ export default {
           this.$set(this.allOrderToDo[idx], 'finished', true)
           this.$delete(this.allOrderToDo, idx)
           // console.log(this.allOrderToDo)
+
+          // 完成订单，更新本地订单个数记录，弹窗通知
+          let len = this.getOrderLength()
+          this.setOrderLength(len - 1)
+          this.openFinishOrder()
         }, () => {
           // todo:显示错误信息
           this.showMessage('网络错误')
@@ -78,12 +106,21 @@ export default {
       }
     },
 
+    // 每隔一段时间从服务器获取未完成订单
     getUnfinishedOrderRecycly: function () {
       // console.log('getUnfinishedOrder called')
 
       service.getAllToDoOrder(
         (textGet) => {
           this.allOrderToDo = textGet['data']
+          console.log(this.allOrderToDo.length)
+
+          // 当获取到新订单时，弹窗通知
+          let len = this.getOrderLength()
+          if (this.allOrderToDo.length !== len) {
+            this.openNewOrder(this.allOrderToDo.length - len)
+            this.setOrderLength(this.allOrderToDo.length - len)
+          }
           // 每个订单获取菜品
           this.allOrderToDo.forEach(order => {
             axios.get('/api/dishrecord/' + order.id + '/')
@@ -102,7 +139,7 @@ export default {
         let _this = this
         this.timeOut = setTimeout(() => {
           _this.getUnfinishedOrderRecycly()
-        }, 50000)
+        }, 10000)
       } else {
         this.timeOut = ''
       }

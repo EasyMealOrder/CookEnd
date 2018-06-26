@@ -2,16 +2,21 @@
 
 const state = {
   timeout: '',
-  username: ''
+  username: '',
+  orderlength: 0
 }
 
 const getters = {
-  getUserName: state => state.username
+  getUserName: state => state.username,
+  getOrderLength: state => state.orderlength
 }
 
 const actions = {
   setCookMessage ({commit}, name) {
     commit('setUserMessage', name)
+  },
+  setOrderLength ({commit}, len) {
+    commit('setStateOrderLength', len)
   }
 }
 
@@ -19,6 +24,9 @@ const mutations = {
   setUserMessage (state, name) {
     state.username = name
     console.log('set user message')
+  },
+  setStateOrderLength (state, len) {
+    state.orderlength = len
   }
 }
 
