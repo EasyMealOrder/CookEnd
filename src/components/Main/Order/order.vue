@@ -48,9 +48,11 @@ export default {
       console.log(msg)
     },
     ...mapGetters([
+      // 返回当前页面的订单长度
       'getOrderLength'
     ]),
     ...mapActions([
+      // 修改记录订单长度的全局变量
       'setOrderLength'
     ]),
     openNewOrder (num) {

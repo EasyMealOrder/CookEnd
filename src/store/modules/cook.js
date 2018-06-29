@@ -2,7 +2,9 @@
 
 const state = {
   timeout: '',
+  // 记录厨师用户名
   username: '',
+  // 记录当前页面订单长度
   orderlength: 0
 }
 

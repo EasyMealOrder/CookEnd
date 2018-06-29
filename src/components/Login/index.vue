@@ -38,9 +38,11 @@ export default {
     }
   },
   methods: {
+    // 返回厨师账号
     ...mapActions([
       'setCookMessage'
     ]),
+    // 登录
     cookLogin () {
       console.log(this.loginForm)
       const loginUrL = '/api/signin/'
@@ -50,6 +52,7 @@ export default {
       params.append('password', this.loginForm.password)
       // 在登录瞬间获取用户名用于个人信息显示
       this.setCookMessage(this.loginForm.username)
+      //　登陆成功，进入厨师端主界面
       axios.post(loginUrL, params, {withCredentials: true})
         .then(response => {
           if (response.data.success === true) {

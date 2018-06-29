@@ -16,6 +16,7 @@ export default {
     if (parts.length === 2) return parts.pop().split(';').shift()
   },
   // 厨师用
+  // 返回当前账号所有未完成的订单
   getAllToDoOrder (cb) {
     console.log('getAllToDoOrder called')
 
@@ -27,6 +28,7 @@ export default {
   },
 
   // 厨师用
+  // 点击完成某个订单中某个菜品时执行
   finishADishInAOrder: function (orderId, dishId, cb, errorCb) {
     const loginUrL = '/api/dishrecord/finish/'
 
@@ -45,6 +47,7 @@ export default {
   },
 
   // 厨师用
+  // 点击某个订单的“全部完成”按钮时执行
   finishAOrder: function (orderId, cb, errorCb) {
     const loginUrL = '/api/order/finish/'
 
