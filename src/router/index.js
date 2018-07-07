@@ -15,7 +15,7 @@ export default new Router({
   linkActiveClass: 'active',
   routes: [
     {
-      path: '/',
+      path: '/Login',
       name: 'Login',
       component: Login
     },
