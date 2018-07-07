@@ -8,8 +8,10 @@ import Order from '../components/Main/Order/order.vue'
 
 Vue.use(Router)
 
-export default new Router({mode: 'history',
-  base: __dirname,
+export default new Router({
+  mode: 'history',
+  base: '/cook/',
+  // base: __dirname,
   linkActiveClass: 'active',
   routes: [
     {
